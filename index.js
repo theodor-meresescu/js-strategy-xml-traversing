@@ -16,23 +16,13 @@
 //         //do stuff on error
 //     });
 
-class XMLContainer {
-    constructor(x) {
-        this.$value = new DOMParser().parseFromString(x,'text/xml');
+const traverseDOM = (node, fn) => {
+    fn(node);
+    node = node.firstChild;
+    while(node) {
+        traverseDOM(node, fn);
+        node = node.nextSibling;
     }
-
-    static with(val) {
-        return new XMLContainer(val);
-    }
-}
-
-XMLContainer.prototype.traverseDOM = (fn) => {
-        fn(this.$value);
-        let node = XMLContainer.with(this.$value.firstChild);
-        while(node.$value) {
-            node.traverseDOM(fn);
-            node = XMLContainer.with(this.$value.nextSibling);
-        }
 };
 
 const XmlStrategy = {
@@ -47,7 +37,8 @@ const XmlStrategy = {
                 throw new Error('Network response was not ok.');
             })
             .then((xmlDoc) => {
-                XMLContainer.with(xmlDoc).traverseDOM((currentNode) => {
+            xmlDoc = new DOMParser().parseFromString(xmlDoc,'text/xml');
+                traverseDOM(xmlDoc, (currentNode) => {
                     //awesome code involving currentNode
                 });
             })
