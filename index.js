@@ -31,7 +31,7 @@ XMLContainer.prototype.traverseDOM = (fn) => {
         let node = XMLContainer.with(this.$value.firstChild);
         while(node.$value) {
             node.traverseDOM(fn);
-            node = node.nextSibling;
+            node = XMLContainer.with(this.$value.nextSibling);
         }
 };
 
