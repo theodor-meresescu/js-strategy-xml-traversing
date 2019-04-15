@@ -17,30 +17,33 @@
 //     });
 
 //Stateless version
-// class XMLContainer {
-//     constructor(x) {
-//         if(typeof x === "string") {
-//             this.$value = new DOMParser().parseFromString(x,'text/xml');
-//         }
-//         else {
-//             this.$value = x;
-//         }
+class XMLContainer {
+    constructor(x) {
+        if (typeof x === "string") {
+            this.$value = new DOMParser().parseFromString(x, 'text/xml');
+        }
+        else {
+            this.$value = x;
+        }
+    }
 
-//     }
+    static with(val) {
+        return new XMLContainer(val);
+    }
 
-//     static with(val) {
-//         return new XMLContainer(val);
-//     }
+    map(f) {
+        return XMLContainer.with(f(this.$value));
+    }
 
-//     traverse (fn) {
-//         fn(this.$value);
-//         let node = XMLContainer.with(this.$value.firstChild);
-//         while(node.$value) {
-//             node.traverse(fn);
-//             node = XMLContainer.with(node.$value.nextSibling);
-//         }
-// 	};
-// }
+    traverse(fn) {
+        this.map(fn);
+        let node = this.map((m) => m.firstChild);
+        while (node.$value) {
+            node.traverse(fn);
+            node = node.map((m) => m.nextSibling);
+        }
+    };
+}
 
 const traverseDOM = (node, fn) => {
     fn(node);
