@@ -45,14 +45,14 @@ class XMLContainer {
     };
 }
 
-const traverseDOM = (node, fn) => {
-    fn(node);
-    node = node.firstChild;
-    while(node) {
-        traverseDOM(node, fn);
-        node = node.nextSibling;
-    }
-};
+//const traverseDOM = (node, fn) => {
+//    fn(node);
+//    node = node.firstChild;
+//    while(node) {
+//        traverseDOM(node, fn);
+//        node = node.nextSibling;
+//    }
+//};
 
 const XmlStrategy = {
     processFile: (path) => {
@@ -68,13 +68,13 @@ const XmlStrategy = {
             .then((xmlText) => {
                 let xmlDoc = new DOMParser().parseFromString(xmlText,'text/xml');
 
-                // XMLContainer.with(xmlDoc).traverse((currentNode) => {
+                 XMLContainer.with(xmlDoc).traverse((currentNode) => {
                 //     awesome code involving currentNode
-                // });
+                 });
 
-                traverseDOM(xmlDoc, (currentNode) => {
+                //traverseDOM(xmlDoc, (currentNode) => {
                     //awesome code involving currentNode
-                });
+                //});
             })
             .catch((error) => {
                 console.log("Network error:" + error.message);
